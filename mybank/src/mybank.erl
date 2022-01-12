@@ -1,6 +1,6 @@
 -module(mybank).
 
--export([start/0, stop/0, deposit/2, balance/1, withdraw/2]).
+-export([start_link/0, stop/0, deposit/2, balance/1, withdraw/2]).
 -export([init/0]).
 
 -record(state, {
@@ -8,10 +8,11 @@
 }).
 
 %%========= API =========%%
-start() ->
+start_link() ->
     io:format("~n~n Opening the bank...~n~n"),
-    Pid = spawn(?MODULE, init, []),
-    register(?MODULE, Pid).
+    Pid = spawn_link(?MODULE, init, []),
+    register(?MODULE, Pid),
+    {ok, Pid}.
 
 stop() ->
     ?MODULE ! terminate.
